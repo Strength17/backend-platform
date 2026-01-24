@@ -1,7 +1,7 @@
 import 'dotenv/config';
 import express from 'express';
 import supabase from './services/supabase.js';
-import { verifyJwt } from './middleware/verify-jwt.js';
+import { verifyJwt } from './middlewares/authMiddleware.js';
 
 
 const app = express();
