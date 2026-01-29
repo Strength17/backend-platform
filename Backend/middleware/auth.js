@@ -1,3 +1,6 @@
+// File: Backend/middleware/auth.js
+// Purpose: Middleware to verify JWT from Supabase Auth
+
 import { jwtVerify, createRemoteJWKSet } from 'jose';
 
 const SUPABASE_PROJECT_URL = process.env.SUPABASE_URL;

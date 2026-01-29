@@ -1,3 +1,6 @@
+// File: Backend/utils/supabaseClient.js
+// Purpose: Supabase client initialization
+
 import { createClient } from '@supabase/supabase-js';
 
 if (!process.env.SUPABASE_URL) {

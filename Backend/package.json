@@ -1,7 +1,7 @@
 {
-  "name": "day-2-deliverable-content",
+  "name": "backend-platform",
   "version": "1.0.0",
-  "description": "This is the day 2 deliverable of my 6 months project timeline",
+  "description": "Backend platform for organization and user management",
   "license": "ISC",
   "author": "Strength Awa",
   "type": "module",

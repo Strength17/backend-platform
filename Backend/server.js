@@ -1,8 +1,12 @@
+// File: Backend/server.js
+// Purpose: Main server file setting up Express routes and middleware
+
 import 'dotenv/config';
 import express from 'express';
 import supabase from './utils/supabaseClient.js';
 import { verifyJwt } from './middleware/auth.js';
 import orgAccess from './middleware/orgAccess.js';
+import { listUsers } from './controllers/userControllers.js';
 
 
 const app = express();
@@ -17,7 +21,7 @@ app.get('/test-db', async (req, res) => {
   const { data, error } = await supabase.from('users').select('*').limit(5);
 
   if (error) {
-    return res.status(500).json({ error: error.message });
+    return res.status(500).json({ error: error.maessage });
   }
 
   res.json(data);
@@ -36,13 +40,7 @@ app.get(
   "/orgs/:org_id/protected",
   verifyJwt,    // verifies JWT → user_id
   orgAccess,         // verifies org membership
-  (req, res) => {
-    res.json({
-      message: "Org access granted",
-      user: req.user,
-      org: req.org,
-    });
-  }
+  listUsers        // controller that uses req.org
 );
 
 

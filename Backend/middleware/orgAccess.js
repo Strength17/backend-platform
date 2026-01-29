@@ -1,8 +1,11 @@
+// File: Backend/middleware/orgAccess.js
+// Purpose: Middleware to verify user access to a specific organization
+
 import supabase from "../utils/supabaseClient.js";
+import { getTenantQuery } from '../utils/tenantQuery.js';
 
 export default async function orgAccess(req, res, next) {
   // 1️⃣ Assert authenticated user
-
   const userId = req.user?.sub; 
   if (!userId) {
     return res.status(401).json({ error: "Unauthenticated" });
@@ -20,14 +23,15 @@ export default async function orgAccess(req, res, next) {
   }
 
   // 3️⃣ Verify org exists (prevents phantom orgs)
-  const { data: org, error: orgError } = await supabase
-    .from("organisation")
-    .select("id")
-    .eq("id", orgId)
-    .single();
+const { data: org, error: orgError } = await supabase
+  .from("organisation")
+  .select("id")
+  .eq("id", orgId)
+  .single();
+
 
   if (orgError || !org) {
-    return res.status(404).json({ error: "Organization not found" });
+    return res.status(404).json({ error: `Organization not found` });
   }
 
   console.log("AUTH CHECK", {
@@ -37,12 +41,10 @@ export default async function orgAccess(req, res, next) {
 
 
   // 4️⃣ Verify membership
-  const { data: membership, error: memberError } = await supabase
-    .from("org_members")
-    .select("role")
-    .eq("user_id", userId)
-    .eq("org_id", orgId)
-    .single();
+  const { data: membership, error: memberError } = await getTenantQuery(
+    supabase.from("org_members").select("role"),
+    orgId
+  ).eq("user_id", userId).single();
 
   // 5️⃣ Explicit authorization failure
   if (!membership) {
